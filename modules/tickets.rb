@@ -16,6 +16,7 @@ class Tickets
   end
 
   def films()
+    sql = "SELECT * FROM "
   end
 
   def customers()
@@ -30,7 +31,7 @@ class Tickets
     SqlRunner.run(sql)
   end
 
-  def self.map_runner
+  def self.map_runner(sql)
     result = SqlRunner
     return result.maps {|result| Tickets.new(result)}
   end

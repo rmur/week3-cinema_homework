@@ -1,4 +1,5 @@
 require_relative('../db/sql_runner')
+require_relative('./films')
 
 
 class Customer
@@ -22,6 +23,18 @@ class Customer
     SqlRunner.run(sql)
   end
 
+  def films()
+    #logic - select all films from films table 
+    #join it with tickets where film_id correlates to films.id from the table
+    # with the customer ID 
+    sql = "SELECT films.* FROM films          
+    INNER JOIN tickets ON tickets.film_id = films.id 
+    WHERE customer_id = #{@id}
+    "
+    Film.map_runner(sql)
+
+  end
+
   def self.show_all()
     sql = "SELECT * FROM customers;"
     Customer.map_runner
@@ -32,7 +45,7 @@ class Customer
     SqlRunner.run(sql)
   end
 
-  def self.map_runner()
+  def self.map_runner(sql)
     result = SqlRunner.run(sql)
     return result.map{ | result | Customer.new(result)}
   end
