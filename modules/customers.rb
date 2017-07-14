@@ -6,13 +6,20 @@ class Customer
   attr_reader :id
   def initialize(parameters)
     @name = parameters['name']
-    @funds = parameters['funds'].to_i
+    @funds = parameters['funds'].to_f
     @id = parameters['id'].to_i if parameters['id']
   end  
 
   def save()
     sql = "INSERT INTO customers(name , funds) VALUES ('#{@name}', #{@funds}) RETURNING id"
     @id = SqlRunner.run(sql)[0]['id'].to_i
+  end
+
+  def update()
+    sql = "UPDATE customers SET 
+    (name, funds) = ('#{@name}', #{@funds}) 
+    WHERE id = #{@id};"
+    SqlRunner.run(sql)
   end
 
   def self.show_all()
