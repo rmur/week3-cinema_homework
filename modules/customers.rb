@@ -10,7 +10,23 @@ class Customer
     @id = parameters['id'].to_i if parameters['id']
   end  
 
-  def self.delete_all
+  def save()
+    sql = "INSERT INTO customers(name , funds) VALUES ('#{@name}', #{@funds}) RETURNING id"
+    @id = SqlRunner.run(sql)[0]['id'].to_i
+  end
+
+  def self.show_all()
+    sql = "SELECT * FROM customers;"
+    Customer.map_runner
+  end
+
+  def self.delete_all()
     sql = "DELETE FROM customers;"
+    SqlRunner.run(sql)
+  end
+
+  def self.map_runner()
+    result = SqlRunner.run(sql)
+    return result.map{ | result | Customer.new(result)}
   end
 end
